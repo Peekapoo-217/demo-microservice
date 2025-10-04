@@ -11,7 +11,7 @@ export class AuthClientService {
             const response = await this.httpService.axiosRef.get(
                 'http://localhost:3001/auth/validate',
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `${token}` },
                 },
             );
             return response.data;

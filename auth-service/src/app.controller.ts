@@ -26,20 +26,9 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Validate' })
   @Get('validate')
   validateToken(@Req() req: any) {
-    return req.user;
-  }
-
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  @ApiOperation({ summary: 'Get user profile' })
-  @ApiResponse({ status: 200, description: 'Return user profile' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Request() req) {
     return req.user;
   }
 }
