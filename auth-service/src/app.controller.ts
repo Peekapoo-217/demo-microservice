@@ -28,7 +28,12 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Validate' })
   @Get('validate')
-  validateToken(@Req() req: any) {
-    return req.user;
+  @UseGuards(JwtAuthGuard)
+  async validateToken(@Req() req: any) {
+    const user = req.user;
+    return await {
+      id: user.userId,
+      email: user.email,
+    };
   }
 }
