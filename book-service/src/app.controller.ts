@@ -10,7 +10,6 @@ export class BooksController {
 
   @Get('display')
   findAll(@Req() req) {
-    console.log("abv");
     return this.booksService.findAll();
   }
 
@@ -36,4 +35,11 @@ export class BooksController {
   remove(@Param('id') id: string) {
     return this.booksService.remove(id);
   }
+
+   @Get('health')
+  getHealth() {
+    return { status: 'ok' };
+  }
+
+  
 }

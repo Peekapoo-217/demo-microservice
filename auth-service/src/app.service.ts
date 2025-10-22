@@ -29,23 +29,7 @@ export class AuthService {
 
   }
 
-  async validateToken(token: string) {
-    try {
-      const payload = this.jwtService.verify<JwtPayload>(token);
-
-      const user = await this.userRepository.findOne({ where: { id: payload.sub } });
-      if (!user) {
-        throw new UnauthorizedException('User not found!!!!!');
-      }
-      return {
-        userId: user.id,
-        email: user.email,
-        role: user.role,
-      };
-    } catch (err) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-  }
+  
 
   async register(registerDto: RegisterDto) {
     const { email, password, role } = registerDto;

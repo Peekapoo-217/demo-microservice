@@ -8,8 +8,10 @@ import { HttpModule } from '@nestjs/axios';
 import { Borrow } from './entities/borrow.entity';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
 import { BorrowService } from './app.service';
-import { AuthClientService } from './clients/auth-client.service';
+
 import { BorrowController } from './app.controller';
+import { HealthController } from './health.controller';
+import { ConsulModule } from './consul/consul.module';
 
 @Module({
   imports: [
@@ -39,10 +41,12 @@ import { BorrowController } from './app.controller';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
 
+    ConsulModule.register('borrow-service', 3003),
+
     TypeOrmModule.forFeature([Borrow]),
   ],
 
-  controllers: [BorrowController],
-  providers: [BorrowService, JwtAuthGuard, AuthClientService],
+  controllers: [BorrowController, HealthController],
+  providers: [BorrowService, JwtAuthGuard],
 })
 export class AppModule { }

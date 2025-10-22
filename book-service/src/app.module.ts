@@ -7,8 +7,9 @@ import { Book } from './entities/book.entity';
 import { BooksController } from './app.controller';
 import { BooksService } from './app.service';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
-import { AuthClientService } from './clients/auth-client.service';
 import { HttpModule } from '@nestjs/axios';
+import { HealthController } from './health.controller';
+import { ConsulModule } from './consul/consul.module';
 
 @Module({
   imports: [
@@ -37,9 +38,11 @@ import { HttpModule } from '@nestjs/axios';
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
+
+     ConsulModule.register('book-service', 3002),
   ],
-  controllers: [BooksController],
-  providers: [BooksService, JwtAuthGuard, AuthClientService],
+  controllers: [BooksController, HealthController],
+  providers: [BooksService, JwtAuthGuard],
 
 })
 export class AppModule { }

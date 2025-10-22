@@ -8,6 +8,8 @@ import { AuthController } from './app.controller';
 import { User } from './entities/user.entity';
 import { HttpModule } from '@nestjs/axios';
 import { AuthService } from './app.service';
+import { HealthController } from './health.controller';
+import { ConsulModule } from './consul/consul.module';
 
 @Module({
   imports: [
@@ -34,6 +36,9 @@ import { AuthService } from './app.service';
 
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
+
+   ConsulModule.register('auth-service', 3001),
+ 
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -43,7 +48,7 @@ import { AuthService } from './app.service';
       }),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, HealthController ],
   providers: [JwtStrategy, AuthService],
   exports: [JwtModule, PassportModule],
 })

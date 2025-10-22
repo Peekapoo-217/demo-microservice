@@ -8,6 +8,7 @@ import { RegisterDto } from './dto/register.dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  
   constructor(private readonly authService: AuthService) { }
 
   @Post('login')
@@ -36,4 +37,11 @@ export class AuthController {
       email: user.email,
     };
   }
+
+   @Get('health')
+  getHealth() {
+    return { status: 'ok' };
+  }
+
+  
 }
