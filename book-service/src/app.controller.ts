@@ -14,24 +14,26 @@ export class BooksController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('books/id')
+  getDetails(@Req() req) {
+    return this.booksService.getDetails(req.query.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   create(@Body() createBookDto: CreateBookDto) {
     return this.booksService.create(createBookDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(id);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Post(':id/update')
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     return this.booksService.update(id, updateBookDto);
   }
 
-  @Delete(':id')
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/delete')
   remove(@Param('id') id: string) {
     return this.booksService.remove(id);
   }
