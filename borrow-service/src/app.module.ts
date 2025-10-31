@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 
 import { Borrow } from './entities/borrow.entity';
@@ -11,7 +9,7 @@ import { BorrowService } from './app.service';
 
 import { BorrowController } from './app.controller';
 import { HealthController } from './health.controller';
-import { ConsulModule } from './consul/consul.module';
+import { ConsulModule } from '@registry/consul';
 
 @Module({
   imports: [
@@ -38,10 +36,10 @@ import { ConsulModule } from './consul/consul.module';
       }),
     }),
 
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({}),
-
-    ConsulModule.register('borrow-service', 3003),
+    ConsulModule.register({
+      serviceName: 'borrow-service',
+      servicePort: Number(process.env.PORT) || 3003,
+    }),
 
     TypeOrmModule.forFeature([Borrow]),
   ],

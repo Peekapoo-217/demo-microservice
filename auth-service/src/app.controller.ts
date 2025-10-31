@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, Get, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Req } from '@nestjs/common';
 import { AuthService } from './app.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
@@ -8,7 +8,7 @@ import { RegisterDto } from './dto/register.dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  
+
   constructor(private readonly authService: AuthService) { }
 
   @Post('login')
@@ -37,11 +37,4 @@ export class AuthController {
       email: user.email,
     };
   }
-
-   @Get('health')
-  getHealth() {
-    return { status: 'ok' };
-  }
-
-  
 }

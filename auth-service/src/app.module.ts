@@ -6,14 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './guard/jwt.strategy';
 import { AuthController } from './app.controller';
 import { User } from './entities/user.entity';
-import { HttpModule } from '@nestjs/axios';
 import { AuthService } from './app.service';
 import { HealthController } from './health.controller';
-import { ConsulModule } from './consul/consul.module';
+import { ConsulModule } from '@registry/consul';
 
 @Module({
   imports: [
-    HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env.app',
@@ -37,7 +35,10 @@ import { ConsulModule } from './consul/consul.module';
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
-   ConsulModule.register('auth-service', 3001),
+    ConsulModule.register({
+      serviceName: 'auth-service',
+      servicePort: Number(process.env.PORT) || 3001,
+    }),
  
     JwtModule.registerAsync({
       imports: [ConfigModule],

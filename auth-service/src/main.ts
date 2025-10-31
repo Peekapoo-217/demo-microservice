@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './app.module';
-import { ConsulService } from './consul/consul.service';  
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -12,13 +11,9 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT ? Number(process.env.PORT) : 3001;
+  const port = process.env.PORT || 3001;
   await app.listen(port);
 
-  //  Đăng ký service vào Consul
-  const consulService = new ConsulService('auth-service', port);
-  await consulService.onModuleInit();
-
-  console.log(` Auth-service running on http://localhost:${port}`);
+  console.log(`port: http://localhost:${port}`);
 }
 bootstrap();
