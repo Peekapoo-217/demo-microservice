@@ -4,7 +4,7 @@ import { CreateBorrowDto } from './dto/create-borrow.dto';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
 import { BorrowService } from './app.service';
 
-@Controller('borrows')
+@Controller('borrow')
 export class BorrowController {
   constructor(private readonly borrowService: BorrowService) { }
 
@@ -12,8 +12,6 @@ export class BorrowController {
   @Post('create')
   async create(@Req() req, @Body() createBorrowDto: CreateBorrowDto) {
     createBorrowDto.userId = req.user.id;
-    console.log(req);
-    
     return await this.borrowService.create(createBorrowDto);
   }
 

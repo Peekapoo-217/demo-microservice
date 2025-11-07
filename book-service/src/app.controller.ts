@@ -4,7 +4,7 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { BooksService } from './app.service';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
 
-@Controller('books')
+@Controller('book')
 export class BooksController {
   constructor(private readonly booksService: BooksService) { }
 
@@ -43,5 +43,13 @@ export class BooksController {
     return { status: 'ok' };
   }
 
-  
+  @Post(':id/decrease-copies')
+  async decreaseCopies(@Param('id') id: string, @Body() body: { quantity?: number }) {
+    return this.booksService.decreaseAvailableCopies(id, body.quantity || 1);
+  }
+
+  @Post(':id/increase-copies')
+  async increaseCopies(@Param('id') id: string) {
+    return this.booksService.increaseAvailableCopies(id);
+  }
 }

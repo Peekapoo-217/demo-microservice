@@ -46,5 +46,6 @@ import { ConsulModule } from '@registry/consul';
 
   controllers: [BorrowController, HealthController],
   providers: [BorrowService, JwtAuthGuard],
+  exports: [ConsulModule],
 })
 export class AppModule { }

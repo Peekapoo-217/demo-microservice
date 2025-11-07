@@ -7,10 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BooksService {
-  private books = [
-    { id: 1, title: 'Clean Code' },
-    { id: 2, title: 'Domain-Driven Design' },
-  ];
   constructor(
     @InjectRepository(Book)
     private bookRepository: Repository<Book>) { }
@@ -54,5 +50,44 @@ export class BooksService {
       throw new Error('Error deleting book');
     }
     return { deleted: true };
+  }
+
+  async decreaseAvailableCopies(id: string, quantity: number) {
+    const book = await this.bookRepository.findOne({ where: { id } });
+
+    if (!book) {
+      throw new NotFoundException(`Book with ID ${id} not found`);
+    }
+
+    if (book.availableCopies < quantity) {
+      throw new Error(`Not enough copies available. Only ${book.availableCopies} copies left`);
+    }
+
+    book.availableCopies -= quantity;
+    await this.bookRepository.save(book);
+
+    return {
+      success: true,
+      bookId: id,
+      borrowedQuantity: quantity,
+      remainingCopies: book.availableCopies,
+    };
+  }
+
+  async increaseAvailableCopies(id: string) {
+    const book = await this.bookRepository.findOne({ where: { id } });
+
+    if (!book) {
+      throw new NotFoundException(`Book with ID ${id} not found`);
+    }
+
+    book.availableCopies += 1;
+    await this.bookRepository.save(book);
+
+    return {
+      success: true,
+      bookId: id,
+      remainingCopies: book.availableCopies,
+    };
   }
 }
